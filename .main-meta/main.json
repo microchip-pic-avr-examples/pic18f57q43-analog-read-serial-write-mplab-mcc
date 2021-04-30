@@ -3,11 +3,11 @@
     "category": "com.microchip.ide.project",
     "content": {
         "metaDataVersion": "1.1.0",
-        "name": "com.microchip.mcu8.mplabx.project.pic18f57q43-adc-read-mplab-mcc",
+        "name": "com.microchip.mcu8.mplabx.project.pic18f57q43-analog-read-serial-write-mplab-mcc",
         "version": " ",
-        "displayName": "PIC18F57Q43 adc read mplab mcc",
-        "projectName": "pic18f57q43-adc-read-mplab-mcc",
-        "shortDescription": "This code example will use the ADC module to do an analog read and display on the curiosity HPC LEDs",
+        "displayName": "Analog Read Serial Write",
+        "projectName": "pic18f57q43-analog-read-serial-write-mplab-mcc",
+        "shortDescription": "This code example uses the ADC module to do an analog read and display it using the Data Visualizer.",
         "ide": {
             "name": "MPLAB X",
             "semverRange": ">=5.45.0"
