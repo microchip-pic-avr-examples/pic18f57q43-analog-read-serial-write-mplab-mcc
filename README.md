@@ -1,9 +1,9 @@
 <!-- Please do not change this logo with link -->
 [![MCHP](images/microchip.png)](https://www.microchip.com)
 
-# Hello World
+# Analog Read Serial Write
 
-This example shows how to configure the ADCC, and USART on the PIC18F57Q43 Curiosity Nano using MPLAB Code Configurator (MCC) to do an analog conversion and display it on a terminal. The example uses the ADCC module to do the analog conversion and the USART to transmit the data to the terminal.
+This example shows how to configure the ADCC, and UART on the PIC18F57Q43 Curiosity Nano using MPLAB Code Configurator (MCC) to do an analog conversion and display it on a terminal. The example uses the ADCC module to do the analog conversion and the UART to transmit the data to the terminal.
 
 ![PIC18F57Q43 Illustration image](images/pic18f57q43_cnano.jpg)
 
@@ -150,4 +150,4 @@ After having flashed the application to the PIC18F57Q43 Curiosity Nano, the ADC 
 
 ## Summary
 
-The example has shown how MCC can be used to easily configure the ADC to sample an analog signal from a pin and send it over USART to the Data Visualizer.
+The example has shown how MCC can be used to easily configure the ADC to sample an analog signal from a pin and send it over UART to the Data Visualizer.
