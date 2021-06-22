@@ -5,7 +5,7 @@
 
 This example shows how to configure the ADCC, and UART on the PIC18F57Q43 Curiosity Nano using MPLAB Code Configurator (MCC) to do an analog conversion and display it on a terminal. The example uses the ADCC module to do the analog conversion and the UART to transmit the data to the terminal.
 
-![PIC18F57Q43 Illustration image](images/board_without_bg.png)
+<img src="images/pic18f57q43_cnano.jpg" width="600"/></a>
 
 
 ## Related Documentation
