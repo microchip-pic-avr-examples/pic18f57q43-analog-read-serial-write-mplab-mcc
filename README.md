@@ -118,7 +118,10 @@ The plugin shows up in the kit window on it's own tab.
 Taking a look at the main.c file, we can see that the *ADC* measurement is not sent directly, but split into chunks. This is done because we can only send 8-bits and we want to send the 16-bit value that comes from the ADC.
 To visulize this, we need to take special care and create something called a variable that will merge the result into one 16-bit value.
 
-**Click *New Variable Streamer* button**
+1. Click on **Variable Streamers** tab on the left side.
+2. Click **New Variable Streamer** button 
+
+**Variable Streamer Window**
 
 ![Data visualizer - Create new variable](images/variable_streamer.png)
 
