@@ -85,9 +85,8 @@ In the Pins tab, RA0 can be configured with a custom pin name in this case we ca
 In the *Pins Grid View* find UART3 RX3 and TX3 for the connections for the Serial communications int the PIC18F57Q43 cnano. Select TX3 and RX3 as shown in figure below with the coresponding padlock symbol.
 
 **Pins Grid View**
+
 ![MCC - UART3 connections](images/uart3_connections.png)
-
-
 
 ## Data Streamer Configuration
 In the *Device Resources* window click the dropdown arrow next to *Drivers* to expand the choices. Find *Data Streamer Driver* and click the green plus symbol to add the driver to the solution.
@@ -119,7 +118,8 @@ The plugin shows up in the kit window on it's own tab.
 Taking a look at the main.c file, we can see that the *ADC* measurement is not sent directly, but split into chunks. This is done because we can only send 8-bits and we want to send the 16-bit value that comes from the ADC.
 To visulize this, we need to take special care and create something called a variable that will merge the result into one 16-bit value.
 
-Click the create variable button
+**Click *New Variable Streamer* button**
+
 ![Data visualizer - Create new variable](images/variable_streamer.png)
 
 Since we are dealing with a unsigned 16-bit value, choose that when you create this. Start value and end value must be the same as in the main.c file.
@@ -129,14 +129,15 @@ Click Save!
 
 To be able to use this variable, connect the devices COM-port to this variable just created.
 
-Click *Start Streaming COMx*
+**Click *Start Streaming COMx***
+
 ![Data Visualizer - COM port](images/new_variable_streamer.png)
 
 To be able to graph the measurement, click *Variable Streamers*. Select PIC18F57Q43 Curiosity nano 
 
 ![Data Visualizer - Graph creation](images/plot_streaming_data_from_com.png)
 
-*Plot variable*.
+**Plot variable**
 
 ![Data Visualizer - Graph creation](images/plot_streaming_data_from_com1.png)
 
