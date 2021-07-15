@@ -254,6 +254,8 @@
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="memories.rww" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Users/c09087/Documents/pic18f57q43-analog-read-serial-write-mplab-mcc/PIC18F57Q43-analog-read-serial-write-mplab-mcc.X/debug/free/PIC18F57Q43-analog-read-serial-write-mplab-mcc_ptg"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
@@ -439,6 +441,8 @@
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="memories.rww" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Users/c09087/Documents/pic18f57q43-analog-read-serial-write-mplab-mcc/PIC18F57Q43-analog-read-serial-write-mplab-mcc.X/debug/pro/PIC18F57Q43-analog-read-serial-write-mplab-mcc_ptg"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"

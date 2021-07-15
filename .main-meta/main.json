@@ -4,7 +4,7 @@
     "content": {
         "metaDataVersion": "1.1.0",
         "name": "com.microchip.mcu8.mplabx.project.pic18f57q43-analog-read-serial-write-mplab-mcc",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "displayName": "Analog Read Serial Write",
         "projectName": "pic18f57q43-analog-read-serial-write-mplab-mcc",
         "shortDescription": "This code example uses the ADC module to do an analog read and display it using the Data Visualizer.",

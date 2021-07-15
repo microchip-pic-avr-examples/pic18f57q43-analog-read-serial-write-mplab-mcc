@@ -52,6 +52,7 @@ In the *Device Resources* window scroll to find *ADCC* click the dropdown arrow 
 The ADCC was used in this code example to periodically measure the analog channel RA0 (POT) which is connected to a 10kΩ potentiometer on the POT3 Click board. The ADCC was programmed to use Timer1 as an auto-conversion trigger in order to core-independently perform a conversion every 500ms. Additionally, the computation feature of the ADCC was utilized in this example to perform a burst average conversion core independently every time the ADC gets triggered. The ADCC was setup in such a way where it takes 32 consecutive conversions and accumulates the results whenever triggered, and then automatically divides the results by 32 by right shifting the accumulated value by 5 to provide the filtered average ADC result. The MPLAB Code Configurator (MCC) was used to setup the ADCC module for this code example as shown below.
 
 ![MCC - ADCC clock](images/adc_clock.png)
+
 ![MCC - ADCC computation](images/adc_computation.png)
 
 ## Timer 1 (TMR1) Module
@@ -108,6 +109,7 @@ After programming the device we would like to use the *Data Visualizer* to see t
 Configure the device with **9600** baud rate and connect to it.
 
 If you have to install the *Data Visualizer* plugin click on Tools => Plugins => Available plugins. Select checkbox for MPLAB Data Visualizer click on Intall button. To start *Data Visualizer* click the button as shown below
+
 ![Data Visualizer - Baud and Connect](images/data_visualizer.png)
 
 The plugin shows up in the kit window on it's own tab.
@@ -135,6 +137,7 @@ To be able to graph the measurement, click *Variable Streamers*. Select PIC18F57
 ![Data Visualizer - Graph creation](images/plot_streaming_data_from_com.png)
 
 *Plot variable*.
+
 ![Data Visualizer - Graph creation](images/plot_streaming_data_from_com1.png)
 
 When you have done this, you would expect to get a similar output as the graph above.

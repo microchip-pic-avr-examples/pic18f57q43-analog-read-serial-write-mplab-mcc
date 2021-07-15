@@ -85,10 +85,10 @@ void Timer1_Initialize(void)
     T1GATE = 0x0;
     //TMRCS MFINTOSC_31.25kHz; 
     T1CLK = 0x6;
-    //TMRH 255; 
-    TMR1H = 0xFF;
-    //TMRL 255; 
-    TMR1L = 0xFF;
+    //TMRH 194; 
+    TMR1H = 0xC2;
+    //TMRL 247; 
+    TMR1L = 0xF7;
 
     // Load the TMR1 value to reload variable
     timer1ReloadVal=(uint16_t)((TMR1H << 8) | TMR1L);
