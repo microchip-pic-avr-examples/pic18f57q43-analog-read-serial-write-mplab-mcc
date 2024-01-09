@@ -1,181 +1,237 @@
 /**
-  UART3 Generated Driver File
-
-  @Company
-    Microchip Technology Inc.
-
-  @File Name
-    uart3.c
-
-  @Summary
-    This is the generated driver implementation file for the UART3 driver using CCL
-
-  @Description
-    This source file provides APIs for UART3.
-    Generation Information :
-        Driver Version    :  2.4.0
-    The generated drivers are tested against the following:
-        Compiler          :  XC8 v2.2
-        MPLAB             :  Standalone
+ * UART3 Generated Driver API Header File
+ * 
+ * @file uart3.c
+ * 
+ * @ingroup uart3
+ * 
+ * @brief This is the generated driver implementation file for the UART3 driver using CCL
+ *
+ * @version UART3 Driver Version 3.0.4
 */
 
 /*
-Copyright (c) [2012-2020] Microchip Technology Inc.  
+© [2024] Microchip Technology Inc. and its subsidiaries.
 
-    All rights reserved.
-
-    You are permitted to use the accompanying software and its derivatives 
-    with Microchip products. See the Microchip license agreement accompanying 
-    this software, if any, for additional info regarding your rights and 
-    obligations.
-    
-    MICROCHIP SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT 
-    WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT 
-    LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE, NON-INFRINGEMENT 
-    AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP OR ITS
-    LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT, NEGLIGENCE, STRICT 
-    LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER LEGAL EQUITABLE 
-    THEORY FOR ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES INCLUDING BUT NOT 
-    LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES, 
-    OR OTHER SIMILAR COSTS. 
-    
-    To the fullest extend allowed by law, Microchip and its licensors 
-    liability will not exceed the amount of fees, if any, that you paid 
-    directly to Microchip to use this software. 
-    
-    THIRD PARTY SOFTWARE:  Notwithstanding anything to the contrary, any 
-    third party software accompanying this software is subject to the terms 
-    and conditions of the third party's license agreement.  To the extent 
-    required by third party licenses covering such third party software, 
-    the terms of such license will apply in lieu of the terms provided in 
-    this notice or applicable license.  To the extent the terms of such 
-    third party licenses prohibit any of the restrictions described here, 
-    such restrictions will not apply to such third party software.
+    Subject to your compliance with these terms, you may use Microchip 
+    software and any derivatives exclusively with Microchip products. 
+    You are responsible for complying with 3rd party license terms  
+    applicable to your use of 3rd party software (including open source  
+    software) that may accompany Microchip software. SOFTWARE IS ?AS IS.? 
+    NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS 
+    SOFTWARE, INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT,  
+    MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT 
+    WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY 
+    KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF 
+    MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE 
+    FORESEEABLE. TO THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP?S 
+    TOTAL LIABILITY ON ALL CLAIMS RELATED TO THE SOFTWARE WILL NOT 
+    EXCEED AMOUNT OF FEES, IF ANY, YOU PAID DIRECTLY TO MICROCHIP FOR 
+    THIS SOFTWARE.
 */
 
 /**
   Section: Included Files
 */
-#include <xc.h>
 #include "../uart3.h"
-
-const struct UART_INTERFACE UART3_Interface = {
-  .Initialize = UART3_Initialize,
-  .Write = UART3_Write,
-  .Read = UART3_Read,
-  .RxCompleteCallbackRegister = NULL,
-  .TxCompleteCallbackRegister = NULL,
-  .ErrorCallbackRegister = UART3_SetErrorHandler,
-  .FramingErrorCallbackRegister = UART3_SetFramingErrorHandler,
-  .OverrunErrorCallbackRegister = UART3_SetOverrunErrorHandler,
-  .ParityErrorCallbackRegister = NULL,
-  .ChecksumErrorCallbackRegister = NULL,
-  .IsRxReady = UART3_IsRxReady,
-  .IsTxReady = UART3_IsTxReady,
-  .IsTxDone = UART3_IsTxDone
-};
 
 /**
   Section: Macro Declarations
 */
-#define UART3_TX_BUFFER_SIZE 8
-#define UART3_RX_BUFFER_SIZE 8
 
 /**
-  Section: Global Variables
+  Section: Driver Interface
+ */
+
+const uart_drv_interface_t UART3 = {
+    .Initialize = &UART3_Initialize,
+    .Deinitialize = &UART3_Deinitialize,
+    .Read = &UART3_Read,
+    .Write = &UART3_Write,
+    .IsRxReady = &UART3_IsRxReady,
+    .IsTxReady = &UART3_IsTxReady,
+    .IsTxDone = &UART3_IsTxDone,
+    .TransmitEnable = &UART3_TransmitEnable,
+    .TransmitDisable = &UART3_TransmitDisable,
+    .AutoBaudSet = &UART3_AutoBaudSet,
+    .AutoBaudQuery = &UART3_AutoBaudQuery,
+    .BRGCountSet = NULL,
+    .BRGCountGet = NULL,
+    .BaudRateSet = NULL,
+    .BaudRateGet = NULL,
+    .AutoBaudEventEnableGet = NULL,
+    .ErrorGet = &UART3_ErrorGet,
+    .TxCompleteCallbackRegister = NULL,
+    .RxCompleteCallbackRegister = NULL,
+    .TxCollisionCallbackRegister = NULL,
+    .FramingErrorCallbackRegister = &UART3_FramingErrorCallbackRegister,
+    .OverrunErrorCallbackRegister = &UART3_OverrunErrorCallbackRegister,
+    .ParityErrorCallbackRegister = &UART3_ParityErrorCallbackRegister,
+    .EventCallbackRegister = NULL,
+};
+
+/**
+  Section: UART3 variables
 */
-
-static volatile uint8_t uart3TxHead = 0;
-static volatile uint8_t uart3TxTail = 0;
-static volatile uint8_t uart3TxBuffer[UART3_TX_BUFFER_SIZE];
-volatile uint8_t uart3TxBufferRemaining;
-
-static volatile uint8_t uart3RxHead = 0;
-static volatile uint8_t uart3RxTail = 0;
-static volatile uint8_t uart3RxBuffer[UART3_RX_BUFFER_SIZE];
-static volatile uart3_status_t uart3RxStatusBuffer[UART3_RX_BUFFER_SIZE];
-volatile uint8_t uart3RxCount;
-static volatile uart3_status_t uart3RxLastError;
+volatile uart3_status_t uart3RxLastError;
 
 /**
   Section: UART3 APIs
 */
+
 void (*UART3_FramingErrorHandler)(void);
 void (*UART3_OverrunErrorHandler)(void);
-void (*UART3_ErrorHandler)(void);
+void (*UART3_ParityErrorHandler)(void);
 
-void UART3_DefaultFramingErrorHandler(void);
-void UART3_DefaultOverrunErrorHandler(void);
-void UART3_DefaultErrorHandler(void);
+static void UART3_DefaultFramingErrorCallback(void);
+static void UART3_DefaultOverrunErrorCallback(void);
+static void UART3_DefaultParityErrorCallback(void);
+
+/**
+  Section: UART3  APIs
+*/
 
 void UART3_Initialize(void)
 {
-    // Disable interrupts before changing states
-    PIE9bits.U3RXIE = 0;
-    UART3_SetRxInterruptHandler(UART3_Receive_ISR);
-    PIE9bits.U3TXIE = 0;
-    UART3_SetTxInterruptHandler(UART3_Transmit_ISR);
-    PIE9bits.U3EIE = 0;
-    UART3_SetFramingErrorInterruptHandler(UART3_FramingError_ISR);
-    PIE9bits.U3IE = 0;
-    UART3_SetUartInterruptHandler(UART3_UartInterrupt_ISR);
 
     // Set the UART3 module to the options selected in the user interface.
-    // RXB disabled; 
-    U3RXB = 0x0;
-    // TXB disabled; 
-    U3TXB = 0x0;
-    // P1L 0x0; 
-    U3P1L = 0x0;
-    // P2L 0x0; 
-    U3P2L = 0x0;
-    // P3L 0x0; 
-    U3P3L = 0x0;
-    // MODE Asynchronous 8-bit mode; RXEN disabled; TXEN enabled; ABDEN disabled; BRGS normal speed; 
-    U3CON0 = 0x20;
-    // SENDB disabled; BRKOVR disabled; RXBIMD Set RXBKIF on rising RX input; WUE disabled; ON enabled; 
-    U3CON1 = 0x80;
-    // FLO off; TXPOL not inverted; STP Transmit 1Stop bit, receiver verifies first Stop bit; RXPOL not inverted; RUNOVF RX input shifter stops all activity; 
-    U3CON2 = 0x0;
-    // BRGL 25; 
-    U3BRGL = 0x19;
-    // BRGH 0; 
-    U3BRGH = 0x0;
-    // STPMD in middle of first Stop bit; TXWRE No error; 
-    U3FIFO = 0x0;
-    // ABDIE disabled; ABDIF Auto-baud not enabled or not complete; WUIF WUE not enabled by software; 
-    U3UIR = 0x0;
-    // TXCIF 0x0; RXFOIF not overflowed; RXBKIF No Break detected; CERIF No Checksum error; ABDOVF Not overflowed; 
-    U3ERRIR = 0x0;
-    // TXCIE disabled; RXFOIE disabled; RXBKIE disabled; FERIE disabled; CERIE disabled; ABDOVE disabled; PERIE disabled; TXMTIE disabled; 
-    U3ERRIE = 0x0;
 
-    UART3_SetFramingErrorHandler(UART3_DefaultFramingErrorHandler);
-    UART3_SetOverrunErrorHandler(UART3_DefaultOverrunErrorHandler);
-    UART3_SetErrorHandler(UART3_DefaultErrorHandler);
+    //
+    U3RXB = 0x0; 
+    //TXB disabled; 
+    U3TXB = 0x0; 
+    //P1L 0x0; 
+    U3P1L = 0x0; 
+    //P2L 0x0; 
+    U3P2L = 0x0; 
+    //P3L 0x0; 
+    U3P3L = 0x0; 
+    //MODE Asynchronous 8-bit mode; RXEN enabled; TXEN enabled; ABDEN disabled; BRGS high speed; 
+    U3CON0 = 0xB0; 
+    //SENDB disabled; BRKOVR disabled; RXBIMD Set RXBKIF on rising RX input; WUE disabled; ON enabled; 
+    U3CON1 = 0x80; 
+    //FLO off; TXPOL not inverted; STP ; RXPOL not inverted; RUNOVF RX input shifter stops all activity; 
+    U3CON2 = 0x0; 
+    //BRGL 103; 
+    U3BRGL = 0x67; 
+    //BRGH 0; 
+    U3BRGH = 0x0; 
+    //TXBE empty; STPMD in middle of first Stop bit; TXWRE No error; 
+    U3FIFO = 0x2E; 
+    //ABDIE disabled; ABDIF Auto-baud not enabled or not complete; WUIF WUE not enabled by software; 
+    U3UIR = 0x0; 
+    //TXCIF equal; RXFOIF not overflowed; RXBKIF No Break detected; FERIF no error; CERIF No Checksum error; ABDOVF Not overflowed; PERIF no parity error; TXMTIF empty; 
+    U3ERRIR = 0x80; 
+    //TXCIE disabled; RXFOIE disabled; RXBKIE disabled; FERIE disabled; CERIE disabled; ABDOVE disabled; PERIE disabled; TXMTIE disabled; 
+    U3ERRIE = 0x0; 
 
-    uart3RxLastError.status = 0;
+    UART3_FramingErrorCallbackRegister(UART3_DefaultFramingErrorCallback);
+    UART3_OverrunErrorCallbackRegister(UART3_DefaultOverrunErrorCallback);
+    UART3_ParityErrorCallbackRegister(UART3_DefaultParityErrorCallback);
 
+    uart3RxLastError.status = 0;  
+}
+
+void UART3_Deinitialize(void)
+{
+    U3RXB = 0x00;
+    U3TXB = 0x00;
+    U3P1L = 0x00;
+    U3P2L = 0x00;
+    U3P3L = 0x00;
+    U3CON0 = 0x00;
+    U3CON1 = 0x00;
+    U3CON2 = 0x00;
+    U3BRGL = 0x00;
+    U3BRGH = 0x00;
+    U3FIFO = 0x00;
+    U3UIR = 0x00;
+    U3ERRIR = 0x00;
+    U3ERRIE = 0x00;
+}
+
+inline void UART3_Enable(void)
+{
+    U3CON1bits.ON = 1; 
+}
+
+inline void UART3_Disable(void)
+{
+    U3CON1bits.ON = 0; 
+}
+
+inline void UART3_TransmitEnable(void)
+{
+    U3CON0bits.TXEN = 1;
+}
+
+inline void UART3_TransmitDisable(void)
+{
+    U3CON0bits.TXEN = 0;
+}
+
+inline void UART3_ReceiveEnable(void)
+{
+    U3CON0bits.RXEN = 1;
+}
+
+inline void UART3_ReceiveDisable(void)
+{
+    U3CON0bits.RXEN = 0;
+}
+
+inline void UART3_SendBreakControlEnable(void)
+{
+    U3CON1bits.SENDB = 1;
+}
+
+inline void UART3_SendBreakControlDisable(void)
+{
+    U3CON1bits.SENDB = 0;
+}
+
+inline void UART3_AutoBaudSet(bool enable)
+{
+    if(enable)
+    {
+        U3CON0bits.ABDEN = 1; 
+    }
+    else
+    {
+      U3CON0bits.ABDEN = 0;  
+    }
+}
+
+
+inline bool UART3_AutoBaudQuery(void)
+{
+    return (bool)U3UIRbits.ABDIF; 
+}
+
+inline void UART3_AutoBaudDetectCompleteReset(void)
+{
+    U3UIRbits.ABDIF = 0; 
+}
+
+inline bool UART3_IsAutoBaudDetectOverflow(void)
+{
+    return (bool)U3ERRIRbits.ABDOVF; 
+}
+
+inline void UART3_AutoBaudDetectOverflowReset(void)
+{
+    U3ERRIRbits.ABDOVF = 0; 
 }
 
 bool UART3_IsRxReady(void)
 {
-    return (bool)(PIR9bits.U3RXIF);
-}
-
-bool UART3_is_rx_ready(void)
-{    
-    return UART3_IsRxReady();
+    return (bool)(!U3FIFObits.RXBE);
 }
 
 bool UART3_IsTxReady(void)
 {
-    return (bool)(PIR9bits.U3TXIF && U3CON0bits.TXEN);
-}
-
-bool UART3_is_tx_ready(void)
-{
-    return UART3_IsTxReady();
+    return (bool)(U3FIFObits.TXBE && U3CON0bits.TXEN);
 }
 
 bool UART3_IsTxDone(void)
@@ -183,169 +239,81 @@ bool UART3_IsTxDone(void)
     return U3ERRIRbits.TXMTIF;
 }
 
-bool UART3_is_tx_done(void)
+size_t UART3_ErrorGet(void)
 {
-    return UART3_IsTxDone();
-}
+    uart3RxLastError.status = 0;
+    
+    if(U3ERRIRbits.FERIF)
+    {
+        uart3RxLastError.ferr = 1;
+        if(NULL != UART3_FramingErrorHandler)
+        {
+            UART3_FramingErrorHandler();
+        }  
+    }
+    if(U3ERRIRbits.RXFOIF)
+    {
+        uart3RxLastError.oerr = 1;
+        if(NULL != UART3_OverrunErrorHandler)
+        {
+            UART3_OverrunErrorHandler();
+        }   
+    }
 
-uart3_status_t UART3_GetLastStatus(void){
-    return uart3RxLastError;
+    return uart3RxLastError.status;
 }
-
-uart3_status_t UART3_get_last_status(void){
-    return UART3_GetLastStatus();
-}
-
 
 uint8_t UART3_Read(void)
 {
-    while(!PIR9bits.U3RXIF)
-    {
-    }
-
-    uart3RxLastError.status = 0;
-
-    if(U3ERRIRbits.FERIF){
-        uart3RxLastError.ferr = 1;
-        UART3_FramingErrorHandler();
-    }
-
-    if(U3ERRIRbits.RXFOIF){
-        uart3RxLastError.oerr = 1;
-        UART3_OverrunErrorHandler();
-    }
-
-    if(uart3RxLastError.status){
-        UART3_ErrorHandler();
-    }
-
     return U3RXB;
 }
 
+
 void UART3_Write(uint8_t txData)
 {
-    while(0 == PIR9bits.U3TXIF)
+    U3TXB = txData; 
+}
+
+
+
+
+
+
+static void UART3_DefaultFramingErrorCallback(void)
+{
+    
+}
+
+static void UART3_DefaultOverrunErrorCallback(void)
+{
+    
+}
+
+static void UART3_DefaultParityErrorCallback(void)
+{
+    
+}
+
+void UART3_FramingErrorCallbackRegister(void (* callbackHandler)(void))
+{
+    if(NULL != callbackHandler)
     {
+        UART3_FramingErrorHandler = callbackHandler;
     }
-
-    U3TXB = txData;    // Write the data byte to the USART.
 }
 
-char getch(void)
+void UART3_OverrunErrorCallbackRegister(void (* callbackHandler)(void))
 {
-    return UART3_Read();
-}
-
-void putch(char txData)
-{
-    UART3_Write(txData);
-}
-
-void UART3_Transmit_ISR(void)
-{
-    // use this default transmit interrupt handler code
-    if(sizeof(uart3TxBuffer) > uart3TxBufferRemaining)
+    if(NULL != callbackHandler)
     {
-        U3TXB = uart3TxBuffer[uart3TxTail++];
-       if(sizeof(uart3TxBuffer) <= uart3TxTail)
-        {
-            uart3TxTail = 0;
-        }
-        uart3TxBufferRemaining++;
-    }
-    else
+        UART3_OverrunErrorHandler = callbackHandler;
+    }    
+}
+
+void UART3_ParityErrorCallbackRegister(void (* callbackHandler)(void))
+{
+    if(NULL != callbackHandler)
     {
-        PIE9bits.U3TXIE = 0;
-    }
-    
-    // or set custom function using UART3_SetTxInterruptHandler()
+        UART3_ParityErrorHandler = callbackHandler;
+    } 
 }
-
-void UART3_Receive_ISR(void)
-{
-    // use this default receive interrupt handler code
-    uart3RxStatusBuffer[uart3RxHead].status = 0;
-
-    if(U3ERRIRbits.FERIF){
-        uart3RxStatusBuffer[uart3RxHead].ferr = 1;
-        UART3_FramingErrorHandler();
-    }
-    
-    if(U3ERRIRbits.RXFOIF){
-        uart3RxStatusBuffer[uart3RxHead].oerr = 1;
-        UART3_OverrunErrorHandler();
-    }
-    
-    if(uart3RxStatusBuffer[uart3RxHead].status){
-        UART3_ErrorHandler();
-    } else {
-        UART3_RxDataHandler();
-    }
-
-    // or set custom function using UART3_SetRxInterruptHandler()
-}
-
-void UART3_RxDataHandler(void){
-    // use this default receive interrupt handler code
-    uart3RxBuffer[uart3RxHead++] = U3RXB;
-    if(sizeof(uart3RxBuffer) <= uart3RxHead)
-    {
-        uart3RxHead = 0;
-    }
-    uart3RxCount++;
-}
-
-void UART3_DefaultFramingErrorHandler(void){}
-
-void UART3_DefaultOverrunErrorHandler(void){}
-
-void UART3_DefaultErrorHandler(void){
-}
-
-void UART3_SetFramingErrorHandler(void (* interruptHandler)(void)){
-    UART3_FramingErrorHandler = interruptHandler;
-}
-
-void UART3_SetOverrunErrorHandler(void (* interruptHandler)(void)){
-    UART3_OverrunErrorHandler = interruptHandler;
-}
-
-void UART3_SetErrorHandler(void (* interruptHandler)(void)){
-    UART3_ErrorHandler = interruptHandler;
-}
-
-void UART3_FramingError_ISR(void)
-{
-    // To clear the interrupt condition, all bits in the UxERRIR register must be cleared
-    U3ERRIR = 0;
-    
-    // add your UART3 error interrupt custom code
-
-}
-
-void UART3_UartInterrupt_ISR(void)
-{
-    // WUIF must be cleared by software to clear UxIF
-    U3UIRbits.WUIF = 0;
-    
-    // add your UART3 interrupt custom code
-}
-
-void UART3_SetRxInterruptHandler(void (* InterruptHandler)(void)){
-    UART3_RxInterruptHandler = InterruptHandler;
-}
-
-void UART3_SetTxInterruptHandler(void (* InterruptHandler)(void)){
-    UART3_TxInterruptHandler = InterruptHandler;
-}
-
-void UART3_SetFramingErrorInterruptHandler(void (* InterruptHandler)(void)){
-    UART3_FramingErrorInterruptHandler = InterruptHandler;
-}
-
-void UART3_SetUartInterruptHandler(void (* InterruptHandler)(void)){
-    UART3_UARTInterruptHandler = InterruptHandler;
-}
-/**
-  End of File
-*/

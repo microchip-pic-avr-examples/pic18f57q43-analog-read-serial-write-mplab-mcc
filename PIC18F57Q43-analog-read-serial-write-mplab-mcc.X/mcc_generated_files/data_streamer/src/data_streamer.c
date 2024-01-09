@@ -1,31 +1,66 @@
-// Generate variable frames for sending data to the MPLAB Data Visualizer, 
-// e.g. to be display on a graph.
-#include <stdint.h>
-#include "../../uart/uart3.h"
+/**
+ * DATASTREAMER Generated Driver API Source File.
+ *
+ * @file data_streamer.c
+ *
+ * @ingroup datastreamer
+ *
+ * @brief This file contains the implementation for the Data Streamer driver APIs.
+ *
+ * @version Data Streamer Driver Version 1.2.0
+ */
+ /*
+© [2024] Microchip Technology Inc. and its subsidiaries.
 
-#include "../../data_streamer/data_streamer.h" // Issue #1 - please log MCC bug.
+    Subject to your compliance with these terms, you may use Microchip 
+    software and any derivatives exclusively with Microchip products. 
+    You are responsible for complying with 3rd party license terms  
+    applicable to your use of 3rd party software (including open source  
+    software) that may accompany Microchip software. SOFTWARE IS ?AS IS.? 
+    NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS 
+    SOFTWARE, INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT,  
+    MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT 
+    WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY 
+    KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF 
+    MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE 
+    FORESEEABLE. TO THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP?S 
+    TOTAL LIABILITY ON ALL CLAIMS RELATED TO THE SOFTWARE WILL NOT 
+    EXCEED AMOUNT OF FEES, IF ANY, YOU PAID DIRECTLY TO MICROCHIP FOR 
+    THIS SOFTWARE.
+*/
 
-#define DATA_STREAMER_START_BYTE 3  //trivial Data Streamer Protocol start of frame token
-#define DATA_STREAMER_END_BYTE (255 - DATA_STREAMER_START_BYTE)  
-// Data Streamer Protocol end byte is the One's compliment (~) of startByte, 
-// e.g. startByte: 0b0000 0011, endByte: 0b1111 1100
+#include "../data_streamer.h"
+#include "../data_streamer_interface.h"
 
-static void variableWrite_sendValue(uint8_t* byte_ptr, uint8_t num_bytes)
- {
-      for(uint8_t i = 0; i < num_bytes; i++)
-      {
-         UART3_Write(byte_ptr[i]);
-      }
-}
+struct DATA_STREAMER_STRUCT DataStreamer;
+struct PACKAGE_STRUCT DATA_STREAMER_PACKAGE;
 
-void variableWrite_sendFrame(uint16_t measurement)
+void DataStreamer_Initialize(void)
 {
-   UART3_Write(DATA_STREAMER_START_BYTE);  
-
-   UART3_Write((measurement >> 0)  & 0xFF); // Low  byte of uint16_t 
-   UART3_Write((measurement >> 8)  & 0xFF); // High byte
-
-   UART3_Write(DATA_STREAMER_END_BYTE);  
-
-   while(!UART3_IsTxDone());
+    DataStreamer_PackageSet(&DataStreamer, sizeof (DataStreamer));
 }
+
+static void DataStreamer_VariableWrite(char var)
+{
+    while (!(DATA_STREAMER.IsTxReady()));
+    DATA_STREAMER.Write(var);
+};
+
+void DataStreamer_FrameSend(void * package, size_t length)
+{
+    char * dp = package;
+    DataStreamer_VariableWrite(DATA_STREAMER_START_BYTE);
+    while (length--)
+    {
+        DataStreamer_VariableWrite(*dp++);
+    }
+    DataStreamer_VariableWrite(DATA_STREAMER_END_BYTE);
+    while (!(DATA_STREAMER.IsTxDone()));
+};
+
+void DataStreamer_PackageSet(void * customStructHandler, size_t customlength)
+{
+    DATA_STREAMER_PACKAGE.varStruct = customStructHandler;
+    DATA_STREAMER_PACKAGE.length = customlength;
+};

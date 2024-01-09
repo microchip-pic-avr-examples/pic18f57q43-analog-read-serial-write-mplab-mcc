@@ -1,44 +1,35 @@
 /**
-  Generated Pins File
-
-  Company:
-    Microchip Technology Inc.
-
-  File Name:
-    pins.c
-
-  Summary:
-    This is generated driver implementation for pins. 
-
-  Description:
-    This file provides implementations for pin APIs for all pins selected in the GUI.
-
-  Generation Information:
-    Driver Version:  3.0.0
-
+ * Generated Driver File
+ * 
+ * @file pins.c
+ * 
+ * @ingroup  pinsdriver
+ * 
+ * @brief This is generated driver implementation for pins. 
+ *        This file provides implementations for pin APIs for all pins selected in the GUI.
+ *
+ * @version Driver Version 3.1.0
 */
 
 /*
-    (c) 2018 Microchip Technology Inc. and its subsidiaries. 
-    
-    Subject to your compliance with these terms, you may use Microchip software and any 
-    derivatives exclusively with Microchip products. It is your responsibility to comply with third party 
-    license terms applicable to your use of third party software (including open source software) that 
-    may accompany Microchip software.
-    
-    THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER 
-    EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY 
-    IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS 
-    FOR A PARTICULAR PURPOSE.
-    
-    IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
-    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
-    WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP 
-    HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO 
-    THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL 
-    CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT 
-    OF FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS 
-    SOFTWARE.
+© [2024] Microchip Technology Inc. and its subsidiaries.
+
+    Subject to your compliance with these terms, you may use Microchip 
+    software and any derivatives exclusively with Microchip products. 
+    You are responsible for complying with 3rd party license terms  
+    applicable to your use of 3rd party software (including open source  
+    software) that may accompany Microchip software. SOFTWARE IS ?AS IS.? 
+    NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS 
+    SOFTWARE, INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT,  
+    MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT 
+    WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY 
+    KIND WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF 
+    MICROCHIP HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE 
+    FORESEEABLE. TO THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP?S 
+    TOTAL LIABILITY ON ALL CLAIMS RELATED TO THE SOFTWARE WILL NOT 
+    EXCEED AMOUNT OF FEES, IF ANY, YOU PAID DIRECTLY TO MICROCHIP FOR 
+    THIS SOFTWARE.
 */
 
 #include "../pins.h"
@@ -74,7 +65,7 @@ void PIN_MANAGER_Initialize(void)
     ANSELC = 0xFF;
     ANSELD = 0xFF;
     ANSELE = 0x7;
-    ANSELF = 0xFF;
+    ANSELF = 0xFC;
 
     /**
     WPUx registers
@@ -85,14 +76,6 @@ void PIN_MANAGER_Initialize(void)
     WPUD = 0x0;
     WPUE = 0x0;
     WPUF = 0x0;
-
-    /**
-    RxyI2C registers
-    */
-    RB1I2C = 0x0;
-    RB2I2C = 0x0;
-    RC3I2C = 0x0;
-    RC4I2C = 0x0;
 
     /**
     ODx registers
@@ -123,14 +106,18 @@ void PIN_MANAGER_Initialize(void)
     INLVLD = 0xFF;
     INLVLE = 0xF;
     INLVLF = 0xFF;
+
+   /**
+    RxyI2C | RxyFEAT registers   
+    */
+    RB1I2C = 0x0;
+    RB2I2C = 0x0;
+    RC3I2C = 0x0;
+    RC4I2C = 0x0;
     /**
     PPS registers
     */
-    ADACTPPS = 0xC; //RB4->ADCC:ADACT;
-    U3CTSPPS = 0x6; //RA6->UART3:U3CTS;
-    U3RXPPS = 0x29; //RF1->UART3:U3RX;
-    T1CKIPPS = 0x10; //RC0->TMR1:T1CKI;
-    T1GPPS = 0xD; //RB5->TMR1:T1G;
+    U3RXPPS = 0x29; //RF1->UART3:RX3;
     RF0PPS = 0x26;  //RF0->UART3:TX3;
 
    /**
@@ -155,7 +142,6 @@ void PIN_MANAGER_Initialize(void)
 void PIN_MANAGER_IOC(void)
 {
 }
-
 /**
  End of File
 */

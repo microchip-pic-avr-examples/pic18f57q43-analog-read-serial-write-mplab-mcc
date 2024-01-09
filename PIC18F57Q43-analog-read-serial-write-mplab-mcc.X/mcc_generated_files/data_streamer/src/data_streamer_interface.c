@@ -1,16 +1,15 @@
-/** 
- * TMR Generated Driver API Header File
- *
- * @file timer_interface.h
- *  
- * @defgroup timer_interface Timer interface
- *
- * @brief This header file provides interfaces to Timer APIs.
- *
- * @version TMR_interface Version 1.0.1
+/**
+ * DATASTREAMER Generated Driver Interface Source API File.
+ * 
+ * @file data_streamer_interface.c
+ * 
+ * @ingroup datastreamer
+ * 
+ * @brief This contains the implementation of the interface contract between the Data Streamer driver and the selected UART instance.
+ * 
+ * @version Data Streamer Driver Version 1.2.0
  */
-
-/*
+ /*
 © [2024] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
@@ -31,32 +30,11 @@
     THIS SOFTWARE.
 */
 
-#ifndef TMR_INTERFACE_H
-#define TMR_INTERFACE_H
+#include "../data_streamer_interface.h"
+#include "../../uart/uart3.h"
 
-/**
- * @brief This file contains API prototypes and other data types for the Timer interface.
- * @{
- */
-
-#include<stddef.h>
-        
-/**
- @ingroup timer_interface
- @struct TMR_INTERFACE
- @brief This structure contains the interfaces to Timer module
- */
- 
-struct TMR_INTERFACE
-{
-    void (*Initialize)(void);
-    void (*Start)(void);
-    void (*Stop)(void);
-    void (*PeriodCountSet)(size_t count);
-    void (*TimeoutCallbackRegister)(void (* CallbackHandler)(void));
-    void (*Tasks)(void);
+const data_streamer_interface_t  DATA_STREAMER = {
+    .Write = &UART3_Write,
+    .IsTxReady = &UART3_IsTxReady,
+    .IsTxDone = &UART3_IsTxDone,
 };
-/**
- * @}
- */
-#endif //TMR_INTERFACE_H
