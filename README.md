@@ -15,9 +15,9 @@ This example shows how to configure the UART, and ADC on the PIC18F57Q43 Curiosi
 
 ## Software Used
 
-- [MPLAB® X IDE](http://www.microchip.com/mplab/mplab-x-ide) **6.15** or newer 
-- [MPLAB® XC8](http://www.microchip.com/mplab/compilers) **2.45** or a newer compiler 
-- [MPLAB® Code Configurator (MCC)](https://www.microchip.com/mplab/mplab-code-configurator) **5.3.7** or newer 
+- [MPLAB® X IDE](http://www.microchip.com/mplab/mplab-x-ide) **6.15** or newer
+- [MPLAB® XC8](http://www.microchip.com/mplab/compilers) **2.45** or a newer compiler
+- [MPLAB® Code Configurator (MCC)](https://www.microchip.com/mplab/mplab-code-configurator) **5.3.7** or newer
 - [PIC18F-Q_DFP](https://packs.download.microchip.com/) **1.23.425**  or newer Device Pack
 
 ## Hardware Used
@@ -30,10 +30,10 @@ This example shows how to configure the UART, and ADC on the PIC18F57Q43 Curiosi
 
 In this project we will read the analog signal from the potentiometer and send it to the PC.
 
-To be able to read the value we would have to configure the Analog Digital Converter (ADC) to read the value from the correct pin. 
+To be able to read the value we would have to configure the Analog Digital Converter (ADC) to read the value from the correct pin.
 
 When using the *Curiosity Nano Adapter* with the *POT 3 click* in space **1** we can read that Analog 1 - AN1 is connected to PORTA - RA0 on the **PIC18F57Q43**
-  
+
 ![Nano Adapter](images/nano_adapter.jpg)
 
 ## Setup
@@ -80,7 +80,7 @@ The order and varibles matter so its important to stay consistent to avoid confu
 - Measurement is the actual 16-bit ADC reading being taken and filtered.
 - Inverse is a negative 16-bit reflection across the Y axis of Measurement.
 - Counter is an 8-bit unit that is forever overflowing and restarting its own count.
-  
+
 ![MCC - Data Streamer Configuration](images/DataStreamer.png)
 
 In the newly created *UART3PLIB* keep everything default.
@@ -96,7 +96,7 @@ These will be the only configured pins for this project.
 |RF1|UART3 TX|
 
 
-In the Pins tab, pins can be configured with a custom pin name in this case we called the pins by their function to make the generated API more readable. Also make sure the analog option is selected for RA0/POT.
+In the Pins tab, pins can be configured with a custom pin name in this case the pins are called by their function to make the generated API more readable. Also make sure the analog option is selected for RA0/POT.
 
 ![MCC - Set Pin to Output](images/PINCONFIG.png)
 
@@ -112,11 +112,11 @@ In the *Pins Grid View* find ANx for the input pin to the ADC module. AN1 coming
 
 1. Right click on **Generate** button
    1. Force update on all
-2. Left Click **Generate** button 
+2. Left Click **Generate** button
 
 ![Generate force update](images/FORCEGEN.png)
 
-After programming the device we would like to use the *Data Visualizer* to see the output. 
+After programming the device we would like to use the *Data Visualizer* to see the output.
 Configure the device with **9600** baud rate and connect to it.
 
 If you have to install the *Data Visualizer* plugin click on Tools => Plugins => Available plugins. Select checkbox for MPLAB Data Visualizer click on Intall button. To start *Data Visualizer* click the button as shown below
@@ -131,13 +131,13 @@ Taking a look at the main.c the data is actually being organized into 3 differen
 introduce the data streamer, how to configure it and how to read them as well.
 
 1. Click on **Variable Streamers** tab on the left side.
-2. Click **New Variable Streamer** button 
+2. Click **New Variable Streamer** button
 
 **Variable Streamer Window**
 
 ![Data visualizer - Create new variable](images/NewVariable.png)
 
-Since we are dealing with 3 variables it is important to set this up correctly. The data streamer works by sending hex values through the dedicated UART, these values correspond to the actual variables that are being sent. In each transaction there is a start and stop condition, and data inbetween. Below is the setup, earlier it was mentioned that the order and size matters, that is the case here. Each variable is associated with a byte position this indicated where in the hex values this variable is located. 
+Since we are dealing with 3 variables it is important to set this up correctly. The data streamer works by sending hex values through the dedicated UART, these values correspond to the actual variables that are being sent. In each transaction there is a start and stop condition, and data inbetween. Below is the setup, earlier it was mentioned that the order and size matters, that is the case here. Each variable is associated with a byte position this indicated where in the hex values this variable is located.
 
 ![Data Visualizer - Variable config](images/Variables.png)
 *Click Save!*
@@ -148,7 +148,7 @@ To be able to use this variable, connect the devices COM-port to this variable j
 
 ![Data Visualizer - COM port](images/COMPORT.png)
 
-To be able to graph the measurement, select PIC18F57Q43 Curiosity nano as the source under *Variable Streamers*. To display the line graph there needs to be an additional 2 plots in order to view the variables sending together. 
+To be able to graph the measurement, select PIC18F57Q43 Curiosity nano as the source under *Variable Streamers*. To display the line graph there needs to be an additional 2 plots in order to view the variables sending together.
 
 ![Data Visualizer - Graph creation](images/Graphs.png)
 The source needs to be selected for every plot, when the plots have their own sources, press play under Potentiometer to start the serial read. Optionally, the terminal source can be set to the COM corresponding to the PIC-Q43, this will display the hex values being sent by the UART.
@@ -157,7 +157,7 @@ The source needs to be selected for every plot, when the plots have their own so
 
 ![Data Visualizer - Graph creation](images/ExpectedResult.png)
 
-When you have done this, you would expect to get a similar output as the graph above. Color for the lines can be changed with the water drop icon. Below that is the hex values expected by this transaction.
+When you have done this, you would expect to get a similar output as the graph above. The lines represent a set of turns done on the potentiometer, along with a couple counts made by the counter. Colors for the lines can be changed with the water drop icon. Below that is the hex values expected by this transaction.
 
 ## Operation
 
