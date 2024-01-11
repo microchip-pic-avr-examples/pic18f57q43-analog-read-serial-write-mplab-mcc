@@ -151,6 +151,7 @@ To be able to use this variable, connect the devices COM-port to this variable j
 To be able to graph the measurement, select PIC18F57Q43 Curiosity nano as the source under *Variable Streamers*. To display the line graph there needs to be an additional 2 plots in order to view the variables sending together.
 
 ![Data Visualizer - Graph creation](images/Graphs.png)
+
 The source needs to be selected for every plot, when the plots have their own sources, press play under Potentiometer to start the serial read. Optionally, the terminal source can be set to the COM corresponding to the PIC-Q43, this will display the hex values being sent by the UART.
 
 **Plot variable**
