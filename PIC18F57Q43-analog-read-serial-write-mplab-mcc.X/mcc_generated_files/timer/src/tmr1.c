@@ -84,8 +84,8 @@ void TMR1_Initialize(void)
     PIR3bits.TMR1IF = 0;
     PIR3bits.TMR1GIF = 0;
     
-    //TMRON enabled; TRD16 enabled; nTSYNC do_not_synchronize; TCKPS 1:1; 
-    T1CON = 0x7;
+    //TMRON enabled; TRD16 enabled; nTSYNC synchronize; TCKPS 1:1; 
+    T1CON = 0x3;
 }
 
 void TMR1_Start(void)

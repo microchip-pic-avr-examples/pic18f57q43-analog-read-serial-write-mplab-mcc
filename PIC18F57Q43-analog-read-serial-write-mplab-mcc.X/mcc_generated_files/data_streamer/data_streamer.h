@@ -56,9 +56,9 @@
  */
 struct __attribute__((packed)) DATA_STREAMER_STRUCT
 {
-    uint16_t measurement;
+    uint16_t Measurement;
     int16_t Inverse;
-    int16_t Counter;
+    int8_t Counter;
 };
 
 /**

@@ -33,7 +33,7 @@
 #include "mcc_generated_files/system/system.h"
 
 
-int16_t Counter = 0;
+int16_t counter = 0;
 uint16_t measurement = 0;
 
 int main(void) {
@@ -55,12 +55,12 @@ int main(void) {
         
         measurement = ADCC_GetFilterValue(); //sets the ADC calculation to a variable
         
-        DataStreamer.measurement = measurement; //sends the calculation to data streamer
+        DataStreamer.Measurement = measurement; //sends the calculation to data streamer
 
         DataStreamer.Inverse = -measurement; //sends the negative calculation to the data streamer
-        DataStreamer.Counter = Counter; //sends the counter variable to the data streamer
+        DataStreamer.Counter = counter; //sends the counter variable to the data streamer
         
-        Counter++;
+        counter++;
         
         DataStreamer_FrameSend(&DataStreamer,sizeof(DataStreamer)); //Sends the variables in the order they were gathered. 
 
