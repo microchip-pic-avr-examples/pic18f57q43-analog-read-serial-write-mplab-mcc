@@ -38,7 +38,7 @@
         },
         "author": "Jamus Griego",
         "peripherals": ["ADCC", "UART", "TMR1"],
-        "keywords": ["MCC", "8/16-bit Timer", "Data Visualizer", "Data Streamer", "Curiosity Nano", "Melody"],
+        "keywords": ["MCC", "8/16-bit Timer", "Data Visualizer", "Curiosity Nano", "Melody"],
         "additionalData": {
             "longDescription": {
                 "metaDataVersion": "1.0.0",
